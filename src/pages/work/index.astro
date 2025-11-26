@@ -1,51 +1,148 @@
 ---
-import { getCollection } from "astro:content";
+import {getCollection} from "astro:content";
 import PageLayout from "@layouts/PageLayout.astro";
 import Container from "@components/Container.astro";
-import { dateRange } from "@lib/utils";
-import { WORK } from "@consts";
+import {dateRange} from "@lib/utils";
+import {WORK} from "@consts";
 
+// Get all work entries, newest start date first
 const collection = (await getCollection("work"))
-  .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf());
+    .sort(
+        (a, b) =>
+            new Date(b.data.dateStart).valueOf() -
+            new Date(a.data.dateStart).valueOf()
+    );
 
+// Render MD/MDX content for each entry
 const work = await Promise.all(
-  collection.map(async (item) => {
-    const { Content } = await item.render();
-    return { ...item, Content };
-  })
+    collection.map(async (item) => {
+        const {Content} = await item.render();
+        return {...item, Content};
+    })
 );
----
 
+// Group entries by company
+const companyMap = new Map();
+
+for (const entry of work) {
+    const company = entry.data.company;
+    if (!companyMap.has(company)) {
+        companyMap.set(company, []);
+    }
+    companyMap.get(company).push(entry);
+}
+
+// Build grouped structure: one item per company
+const groupedWork = Array.from(companyMap.entries())
+    .map(([company, entries]) => {
+        // Sort roles for this company by start date (newest first)
+        entries.sort(
+            (a, b) =>
+                new Date(b.data.dateStart).valueOf() -
+                new Date(a.data.dateStart).valueOf()
+        );
+
+        const first = entries[0]; // most recent
+        const last = entries[entries.length - 1]; // oldest
+
+        const companyStart = last.data.dateStart;
+        const companyEnd = first.data.dateEnd;
+
+        return {
+            company,
+            entries,
+            companyStart,
+            companyEnd,
+        };
+    })
+    // Sort companies by most recent role start date
+    .sort(
+        (a, b) =>
+            new Date(b.entries[0].data.dateStart).valueOf() -
+            new Date(a.entries[0].data.dateStart).valueOf()
+    );
+---
 <PageLayout title={WORK.TITLE} description={WORK.DESCRIPTION}>
   <Container>
     <div class="space-y-10">
       <div class="animate font-semibold text-black dark:text-white">
         Work
       </div>
-      <ul class="flex flex-col space-y-4">
-        { 
-          work.map(entry => (
+
+      <ul class="flex flex-col space-y-6">
+        {
+          groupedWork.map((group) => (
             <li class="animate">
-              <div class="text-sm opacity-75">
-                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
-              </div>
-              <div class="font-semibold text-black dark:text-white">
-                {entry.data.company}
-              </div>
-              <div class="text-sm opacity-75">
-                {entry.data.role}
-              </div>
-              <article>
-                <entry.Content />
-              </article>
+              {
+                group.entries.length === 1
+                  ? (
+                    // --- Single role at this company: simple layout ---
+                    <>
+                      <div class="text-sm opacity-75">
+                        {dateRange(
+                          group.entries[0].data.dateStart,
+                          group.entries[0].data.dateEnd
+                        )}
+                      </div>
+                      <div class="font-semibold text-black dark:text-white">
+                        {group.company}
+                      </div>
+                      <div class="text-sm opacity-75">
+                        {group.entries[0].data.role}
+                      </div>
+                      <article class="mt-1">
+                        <group.entries[0].Content />
+                      </article>
+                    </>
+                  )
+                  : (
+                    // --- Multiple roles at this company: stacked / LinkedIn style ---
+                    <>
+                      {/* Company-wide date range */}
+                      <div class="text-sm opacity-75">
+                        {dateRange(group.companyStart, group.companyEnd)}
+                      </div>
+
+                      {/* Company name */}
+                      <div class="font-semibold text-black dark:text-white">
+                        {group.company}
+                      </div>
+
+                      {/* Stacked roles with timeline dots/lines */}
+                      <ul class="mt-3 flex flex-col space-y-6">
+                        {
+                          group.entries.map((entry, index) => (
+                            <li class="flex">
+                              {/* Timeline column: smaller dot + line */}
+                              <div class="mr-4 flex flex-col items-center">
+                                <div class="h-2 w-2 mt-1 rounded-full bg-gray-700 dark:bg-neutral-400" />
+                                {
+                                  index !== group.entries.length - 1 && (
+                                    <div class="mt-6 w-px flex-1 bg-neutral-300 dark:bg-neutral-700" />
+                                  )
+                                }
+                              </div>
+
+                              {/* Role content */}
+                              <div class="flex-1">
+                                <div class="text-sm opacity-75">
+                                  {entry.data.role} · {dateRange(entry.data.dateStart, entry.data.dateEnd)}
+                                </div>
+                                <article class="mt-1">
+                                  <entry.Content />
+                                </article>
+                              </div>
+                            </li>
+                          ))
+                        }
+                      </ul>
+                    </>
+                  )
+              }
             </li>
           ))
         }
       </ul>
-<!-- 
-      <ul class="animate flex flex-col gap-4">
-
-      </ul> -->
     </div>
   </Container>
 </PageLayout>
