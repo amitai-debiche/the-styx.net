@@ -19,13 +19,35 @@ const projects = (await getCollection("projects"))
 
 const allwork = (await getCollection("work"))
     .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
-    .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE);
+
+const endSortValue = (value) => {
+    if (!value) return 0;
+    if (typeof value === "string") {
+        // "Present" / "Current" / any string should sort as most recent
+        return Number.MAX_SAFE_INTEGER;
+    }
+    return new Date(value).valueOf();
+};
 
 const work = await Promise.all(
-    allwork.map(async (item) => {
-        const {Content} = await item.render();
-        return {...item, Content};
-    })
+    allwork
+        .sort((a, b) => {
+            const aEnd = endSortValue(a.data.dateEnd);
+            const bEnd = endSortValue(b.data.dateEnd);
+
+            // 1) sort by end date (Present/Current first)
+            if (aEnd !== bEnd) return bEnd - aEnd;
+
+            // 2) tie-breaker: most recent start date
+            const aStart = new Date(a.data.dateStart).valueOf();
+            const bStart = new Date(b.data.dateStart).valueOf();
+            return bStart - aStart;
+        })
+        .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE)
+        .map(async (item) => {
+            const { Content } = await item.render();
+            return { ...item, Content };
+        })
 );
 ---
 
