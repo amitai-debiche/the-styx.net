@@ -5,7 +5,7 @@ import Container from "@components/Container.astro";
 import {dateRange} from "@lib/utils";
 import {WORK} from "@consts";
 
-const endSortValue = (value) => {
+const endSortValue = (value: any) => {
     if (!value) return 0;
     if (typeof value === "string") {
         // "Present" / "Current" / any string should sort after real dates
@@ -45,7 +45,7 @@ for (const entry of work) {
 const groupedWork = Array.from(companyMap.entries())
     .map(([company, entries]) => {
         entries.sort(
-            (a, b) =>
+            (a: any, b: any) =>
                 new Date(b.data.dateStart).valueOf() -
                 new Date(a.data.dateStart).valueOf()
         );
@@ -107,7 +107,7 @@ const groupedWork = Array.from(companyMap.entries())
                         {group.entries[0].data.role}
                       </div>
                       <article class="mt-1">
-                        <group.entries[0].Content />
+                          {(() => { const C = group.entries[0].Content; return <C /> })()}:w
                       </article>
                     </>
                   )
@@ -127,7 +127,7 @@ const groupedWork = Array.from(companyMap.entries())
                       {/* Stacked roles with timeline dots/lines */}
                       <ul class="mt-3 flex flex-col space-y-6">
                         {
-                          group.entries.map((entry, index) => (
+                          group.entries.map((entry: any, index: any) => (
                             <li class="flex">
                               {/* Timeline column: smaller dot + line */}
                               <div class="mr-4 flex flex-col items-center">

@@ -20,7 +20,7 @@ const projects = (await getCollection("projects"))
 const allwork = (await getCollection("work"))
     .sort((a, b) => new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf())
 
-const endSortValue = (value) => {
+const endSortValue = (value: any) => {
     if (!value) return 0;
     if (typeof value === "string") {
         // "Present" / "Current" / any string should sort as most recent
