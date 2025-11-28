@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portfolio-deployment
+  namespace: portfolio
+  labels:
+    app: portfolio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portfolio
+  template:
+    metadata:
+      labels:
+        app: portfolio
+    spec:
+      containers:
+        - name: portfolio-container
+          image: ghcr.io/amitai-debiche/the-styx.net:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+              requests:
+                memory: "64Mi"
+                cpu: "250m"
