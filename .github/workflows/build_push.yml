@@ -68,15 +68,15 @@ jobs:
           echo "Updating deployment to use image tag: $NEW_TAG"
 
           # regex look for image line and replace after colon
-          sed -i "s|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:.*|image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$NEW_TAG|" k8/deployment.yaml
+          sed -i "s|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:.*|image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$NEW_TAG|" k8/deployment.yaml
 
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
 
           # Check if there are changes to commit (prevent failure if file didn't change)
-          if [[ -n $(git status -s k8s/deployment.yaml) ]]; then
-            git add k8s/deployment.yaml
-            git commit -m "k8s: update deployment image to $NEW_TAG"
+          if [[ -n $(git status -s k8/deployment.yaml) ]]; then
+            git add k8/deployment.yaml
+            git commit -m "k8: update deployment image to $NEW_TAG"
             git push origin HEAD:${{ github.ref_name }}
           else
             echo "No changes to deployment.yaml"
