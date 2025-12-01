@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: portfolio-container
-          image: ghcr.io/amitai-debiche/the-styx.net:sha-9b77cce
+          image: ghcr.io/amitai-debiche/the-styx.net:sha-9802236
           imagePullPolicy: Always
           ports:
             - containerPort: 80
