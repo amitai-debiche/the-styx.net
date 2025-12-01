@@ -17,8 +17,7 @@ spec:
               service:
                 name: portfolio-service
                 port:
-                  number:
-                    80
+                  number: 80
   tls:
     - hosts:
         - the-styx.net
