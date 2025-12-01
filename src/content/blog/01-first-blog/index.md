@@ -35,11 +35,11 @@ I’ve split the setup into 2 Virtual Machines:
 An edited architecture diagram from K3s might help visualize this:
 <figure>
 <picture class="block dark:hidden">
-  <img src="/public/k3s-architecture-single-server.svg" alt="Diagram for light mode" />
+  <img src="/k3s-architecture-single-server.svg" alt="Diagram for light mode" />
 </picture>
 
 <picture class="hidden dark:block">
-  <img src="/public/k3s-architecture-single-server-dark.svg" alt="Diagram for dark mode" />
+  <img src="/k3s-architecture-single-server-dark.svg" alt="Diagram for dark mode" />
 </picture>
 
 <figcaption class="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -94,11 +94,11 @@ Kubernetes sees the update image in the manifest, terminating old pods and pulli
 
 <figure>
 <picture class="block dark:hidden">
-  <img src="/public/pipeline_flowchart.svg" alt="Diagram for light mode" />
+  <img src="/pipeline_flowchart.svg" alt="Diagram for light mode" />
 </picture>
 
 <picture class="hidden dark:block">
-  <img src="/public/pipeline_flowchart-dark.svg" alt="Diagram for dark mode" />
+  <img src="/pipeline_flowchart-dark.svg" alt="Diagram for dark mode" />
 </picture>
 
 <figcaption class="mt-2 text-xs text-gray-500 dark:text-gray-400">
