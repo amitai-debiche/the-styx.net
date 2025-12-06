@@ -1,12 +1,10 @@
 ---
 company: "TDS Telecom LLC"
-role: "Software Engineering Intern"
+role: "Software Engineer Intern"
 dateStart: "10/1/2024"
-dateEnd: "Present"
+dateEnd: "7/1/2025"
 ---
 
-Developed and implemented an automated batch-expiration process for legacy orders and reports, eliminating a backlog of
-over 400,000 items and streamlining data management
+Eliminated a backlog of 400,000+ items and optimized backend storage by developing a Python module integrated directly into the production infrastructure.
 
-Authored a comprehensive Django-based health check endpoint and integrated with critical services such as Couchbase
-clusters and Siebel, ensuring high availability and minimal downtime
+Quantified AI scraper and bot traffic volume by engineering a Go-based log analyzer that parses HTTP UserAgents against the ai.robots.txt exclusion list.

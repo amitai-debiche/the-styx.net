@@ -5,11 +5,11 @@ dateStart: "04/1/2023"
 dateEnd: "Present"
 ---
 
-Tutored AP Computer Science (Java), guiding high school students through object-oriented programming, algorithmic
-thinking, basic data structures and exam preparation.
+Accelerated proficiency for 10+ students by through Java instruction focused on Object Oriented Design patterns
+and Data Structures; 2 students USACO competitive programming coaching (Data Structures & Algorithms).
 
-Supported undergraduates in data structures & algorithms, reinforcing concepts such as trees, graphs, time complexity
-analysis etc.
-
-Designed personalized lesson plans, coding exercises, and practice contests to adapt to varying skill levels and
+Designed personalized lesson plans, coding exercises, and practice tests to adapt to varying skill levels and
 learning goals.
+
+Working part time to build a Retrieval-Augmented Generation (RAG) pipeline to index unstructured session
+transcripts, utilizing vector embeddings to automate quiz generation and personalize student review materials.
